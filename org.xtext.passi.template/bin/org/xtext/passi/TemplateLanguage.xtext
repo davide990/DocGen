@@ -1,0 +1,60 @@
+grammar org.xtext.passi.TemplateLanguage with org.eclipse.xtext.common.Terminals
+
+generate templateLanguage "http://www.xtext.org/passi/TemplateLanguage"
+
+Template:
+	'template' name = ID '{' Features+=Feature* '}';
+	
+Feature:
+  name = ID ':' value=AttributeValue ';' |
+  TableData
+;
+
+TableData:
+	{TableData}
+	'tableData' 'for' name=ID
+	'{'
+		( tableDataAttributes+=TableDataAttribute |
+			sections += TableSection )*
+	'}'
+;
+
+TableSection:
+	'section' name = (SECTION_HEADER | SECTION_VALUES)
+	'{'
+		attributes += TableDataAttribute*
+	'}'
+;
+
+TableDataAttribute:
+	name = QualifiedName ':' value=AttributeValue ';' |
+	ListAttribute
+;
+
+ListAttribute:
+	name = QualifiedName ':' '{' (values+=STRING (',' values+=STRING)*)?  '}' ';'
+;
+
+AttributeList:
+	'{' (STRING (',' STRING)*)?  '}'
+;
+
+QualifiedName:
+  ID ('.' ID)*
+;
+
+terminal SECTION_HEADER:
+	'header'
+;
+
+terminal SECTION_VALUES:
+	'values'
+;
+
+
+AttributeValue:
+	STRING 	| 
+	INT 	| 
+	'true' 	| 
+	'false'	
+;

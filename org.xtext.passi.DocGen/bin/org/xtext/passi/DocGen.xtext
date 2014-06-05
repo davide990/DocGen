@@ -1,0 +1,72 @@
+grammar org.xtext.passi.DocGen with org.eclipse.xtext.common.Terminals
+
+generate docGen "http://www.xtext.org/passi/DocGen"
+
+/**
+ * This is the main grammar for DocGen plugin. It is a plain xml grammar, so it's model-indipendent.
+ */
+
+Model:
+	prolog=prologTag xmldoc+=element*
+;
+
+element:
+      Start=startTag ( innerElement+=element | ID )* End=endTag
+    | emptyElement
+    ;
+
+startTag  : 
+	TAG_START_OPEN tagName=TagName (Attributes+=Attribute)* TAG_CLOSE
+;
+
+endTag :  
+	TAG_END_OPEN tagName=TagName TAG_CLOSE
+;
+
+emptyElement : 
+	TAG_START_OPEN tagName=TagName  (Attributes+=Attribute)* TAG_EMPTY_CLOSE
+	
+;
+
+prologTag : 
+	PROLOG_START name='xml' (Attributes+=Attribute)* PROLOG_END
+;
+
+TagName:
+	name=ID |
+	name=ID ':' rightName=ID
+;
+
+Attribute:
+	name=ID '=' val=STRING |
+	name=ID ':' rightName=ID '=' val=STRING 
+;
+
+/** 
+ ~~~~~~~~~~~~~~~~~
+ TERMINALS SECTION
+ ~~~~~~~~~~~~~~~~~
+ */
+terminal PROLOG_START:
+	'<?'
+;
+
+terminal PROLOG_END:
+	'?>'	
+;
+
+terminal TAG_START_OPEN : 
+	'<' 
+;
+
+terminal TAG_END_OPEN : 
+	'</'
+;
+
+terminal TAG_CLOSE : 
+	'>'
+;
+
+terminal TAG_EMPTY_CLOSE : 
+	'/>'
+;

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-gen"/>
+	<classpathentry kind="src" path="xtend-gen"/>
+	<classpathentry exported="true" kind="lib" path="libraries/avalon-framework-4.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/batik-all-1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/commons-io-1.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/commons-logging-1.0.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/jaxb-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/jaxb-xmldsig-core-1.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/jaxb-xslfo-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/serializer-2.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/servlet-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/slf4j-api-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/slf4j-log4j12-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/xalan.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/xercesImpl-2.7.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/xml-apis-1.3.04.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/xml-apis-ext-1.3.04.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/xmlgraphics-commons-1.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/itextpdf-5.4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libraries/docx4j-3.1.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.xtext.passi.template"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.xtext.passi.template.ui"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

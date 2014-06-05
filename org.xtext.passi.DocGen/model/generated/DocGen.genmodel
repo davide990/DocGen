@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.xtext.passi.DocGen/src-gen" editDirectory="/org.xtext.passi.DocGen.edit/src"
+    editorDirectory="/org.xtext.passi.DocGen.editor/src" modelPluginID="org.xtext.passi.DocGen"
+    forceOverwrite="true" modelName="DocGen" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="5.0" copyrightFields="false" editPluginID="org.xtext.passi.DocGen.edit"
+    editorPluginID="org.xtext.passi.DocGen.editor" runtimeVersion="2.9">
+  <genPackages prefix="DocGen" basePackage="org.xtext.passi" disposableProviderFactory="true"
+      fileExtensions="drd,ai,rid" ecorePackage="DocGen.ecore#/">
+    <genClasses ecoreClass="DocGen.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//Model/prolog"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//Model/xmldoc"/>
+    </genClasses>
+    <genClasses ecoreClass="DocGen.ecore#//element">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//element/Start"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//element/innerElement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//element/End"/>
+    </genClasses>
+    <genClasses ecoreClass="DocGen.ecore#//startTag">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//startTag/tagName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//startTag/Attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="DocGen.ecore#//endTag">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//endTag/tagName"/>
+    </genClasses>
+    <genClasses ecoreClass="DocGen.ecore#//emptyElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//emptyElement/tagName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//emptyElement/Attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="DocGen.ecore#//prologTag">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocGen.ecore#//prologTag/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DocGen.ecore#//prologTag/Attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="DocGen.ecore#//TagName">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocGen.ecore#//TagName/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocGen.ecore#//TagName/rightName"/>
+    </genClasses>
+    <genClasses ecoreClass="DocGen.ecore#//Attribute">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocGen.ecore#//Attribute/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocGen.ecore#//Attribute/val"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DocGen.ecore#//Attribute/rightName"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

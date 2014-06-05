@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- XTEXT CUSTOM TEXT EDITOR -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <extension
+            point="org.eclipse.ui.editors">
+        <editor
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            default="true"
+            extensions=""
+            id="org.xtext.passi.DocGen"
+            name="DocGen Editor">
+        </editor>
+    </extension>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <extension
+        point="org.eclipse.ui.handlers">
+        <handler
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+            <activeWhen>
+                <reference
+                    definitionId="org.xtext.passi.DocGen.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+        <handler
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="org.xtext.passi.DocGen.validate">
+         <activeWhen>
+            <reference
+                    definitionId="org.xtext.passi.DocGen.Editor.opened">
+            </reference>
+         </activeWhen>
+      	</handler>
+      	<!-- copy qualified name -->
+        <handler
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+            commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
+            <activeWhen>
+				<reference definitionId="org.xtext.passi.DocGen.Editor.opened" />
+            </activeWhen>
+        </handler>
+        <handler
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+            commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
+            <activeWhen>
+            	<and>
+            		<reference definitionId="org.xtext.passi.DocGen.XtextEditor.opened" />
+	                <iterate>
+						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+					</iterate>
+				</and>
+            </activeWhen>
+        </handler>
+    </extension>
+    <extension point="org.eclipse.core.expressions.definitions">
+        <definition id="org.xtext.passi.DocGen.Editor.opened">
+            <and>
+                <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+                <with variable="activeEditor">
+                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
+                        value="org.xtext.passi.DocGen" 
+                        forcePluginActivation="true"/>
+                </with>        
+            </and>
+        </definition>
+        <definition id="org.xtext.passi.DocGen.XtextEditor.opened">
+            <and>
+                <reference definitionId="isXtextEditorActive"/>
+                <with variable="activeEditor">
+                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
+                        value="org.xtext.passi.DocGen" 
+                        forcePluginActivation="true"/>
+                </with>        
+            </and>
+        </definition>
+    </extension>
+    <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.xtext.passi.DocGen"
+            name="DocGen">
+            <keywordReference id="org.xtext.passi.ui.keyword_DocGen"/>
+        </page>
+        <page
+            category="org.xtext.passi.DocGen"
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="org.xtext.passi.DocGen.coloring"
+            name="Syntax Coloring">
+            <keywordReference id="org.xtext.passi.ui.keyword_DocGen"/>
+        </page>
+        <page
+            category="org.xtext.passi.DocGen"
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="org.xtext.passi.DocGen.templates"
+            name="Templates">
+            <keywordReference id="org.xtext.passi.ui.keyword_DocGen"/>
+        </page>
+    </extension>
+    
+    <!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+    <!-- ~~~~~~ METAMODEL PATH PROPERTY PAGE ~~~~~~ -->
+    <!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="org.xtext.passi.DocGen.ui.properties.PassiPropertyPage"
+            id="org.xtext.passi.docgen.ui.properties.samplePropertyPage"
+            name="PASSI Properties">
+            <keywordReference id="org.xtext.passi.ui.keyword_DocGen"/>
+            <enabledWhen>
+            <and>
+            	<instanceof value="org.eclipse.core.resources.IProject"></instanceof>
+            	
+	            <adapt type="org.eclipse.core.resources.IResource">
+	            	<!-- Show this property page only for projects with xtext nature -->
+	            	<test
+                 		property="org.eclipse.core.resources.projectNature"
+                		value="org.eclipse.xtext.ui.shared.xtextNature">
+                	</test>
+	            
+	            </adapt>
+			</and>
+			</enabledWhen>-->
+		</page>	
+	</extension>
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	
+    <extension
+        point="org.eclipse.ui.keywords">
+        <keyword
+            id="org.xtext.passi.ui.keyword_DocGen"
+            label="DocGen"/>
+    </extension>
+    <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Trigger expensive validation"
+            id="org.xtext.passi.DocGen.validate"
+            name="Validate">
+      </command>
+      <!-- copy qualified name -->
+      <command
+            id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+            categoryId="org.eclipse.ui.category.edit"
+            description="Copy the qualified name for the selected element"
+            name="Copy Qualified Name">
+      </command>
+      <command
+            id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+            categoryId="org.eclipse.ui.category.edit"
+            description="Copy the qualified name for the selected element"
+            name="Copy Qualified Name">
+      </command>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                 commandId="org.xtext.passi.DocGen.validate"
+                 style="push"
+                 tooltip="Trigger expensive validation">
+            <visibleWhen checkEnabled="false">
+                <reference
+                    definitionId="org.xtext.passi.DocGen.Editor.opened">
+                </reference>
+            </visibleWhen>
+         </command>  
+         </menuContribution>
+         <!-- copy qualified name -->
+         <menuContribution locationURI="popup:#TextEditorContext?after=copy">
+         	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName" 
+         		style="push" tooltip="Copy Qualified Name">
+            	<visibleWhen checkEnabled="false">
+                	<reference definitionId="org.xtext.passi.DocGen.Editor.opened" />
+            	</visibleWhen>
+         	</command>  
+         </menuContribution>
+         <menuContribution locationURI="menu:edit?after=copy">
+         	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+            	style="push" tooltip="Copy Qualified Name">
+            	<visibleWhen checkEnabled="false">
+                	<reference definitionId="org.xtext.passi.DocGen.Editor.opened" />
+            	</visibleWhen>
+         	</command>  
+         </menuContribution>
+         <menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName" 
+				style="push" tooltip="Copy Qualified Name">
+         		<visibleWhen checkEnabled="false">
+	            	<and>
+	            		<reference definitionId="org.xtext.passi.DocGen.XtextEditor.opened" />
+						<iterate>
+							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+						</iterate>
+					</and>
+				</visibleWhen>
+			</command>
+         </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+                	<reference definitionId="org.xtext.passi.DocGen.Editor.opened">
+                	</reference>
+            	</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+	    <handler
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            commandId="org.eclipse.xtext.ui.editor.FindReferences">
+            <activeWhen>
+                <reference
+                    definitionId="org.xtext.passi.DocGen.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+    </extension>   
+
+<!-- adding resource factories -->
+
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="xml">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+        <resourceServiceProvider
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            uriExtension="xml">
+        </resourceServiceProvider>
+    </extension>
+
+
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~ CODE FOR AUROMATIC XTEXT RESOURCE HANDLING ~~~~~~ -->
+    <!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~ -->
+	<!--
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="drd">
+		</parser>
+	</extension>
+	
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+        <resourceServiceProvider
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            uriExtension="drd">
+        </resourceServiceProvider>
+    </extension>
+    -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~ -->
+
+	<!-- marker definitions for org.xtext.passi.DocGen -->
+	<extension
+	        id="docgen.check.fast"
+	        name="DocGen Problem"
+	        point="org.eclipse.core.resources.markers">
+	    <super type="org.eclipse.xtext.ui.check.fast"/>
+	    <persistent value="true"/>
+	</extension>
+	<extension
+	        id="docgen.check.normal"
+	        name="DocGen Problem"
+	        point="org.eclipse.core.resources.markers">
+	    <super type="org.eclipse.xtext.ui.check.normal"/>
+	    <persistent value="true"/>
+	</extension>
+	<extension
+	        id="docgen.check.expensive"
+	        name="DocGen Problem"
+	        point="org.eclipse.core.resources.markers">
+	    <super type="org.eclipse.xtext.ui.check.expensive"/>
+	    <persistent value="true"/>
+	</extension>
+
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!-- ~~~~~~ Automatic code generation handler ~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!--
+	<extension
+	      point="org.eclipse.xtext.builder.participant">
+	   <participant
+	         class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+	   </participant>
+	</extension>
+	-->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->   
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	
+   <extension point="org.eclipse.ui.commands">
+		<command 
+			name="Generate Documentation" 
+			id="org.xtext.passi.DocGen.ui.GenerationCommand">
+		</command>
+	</extension>
+	
+	<extension point="org.eclipse.ui.handlers">    
+	<handler
+  		class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.xtext.passi.DocGen.ui.GenerationHandler"          
+  		commandId="org.xtext.passi.DocGen.ui.GenerationCommand">    
+	</handler> 
+	</extension>
+
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!-- ~~~~~~ 			Custom Decorator  		  ~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="org.xtext.passi.DocGen.ui.decorator.DocGenDecorator"
+            id="docGenDecorator"
+            label="Resource Decorator"
+            lightweight="true"
+            location="BOTTOM_LEFT"
+            state="true">
+         <enablement>
+            <and>
+               <objectClass
+                     name="org.eclipse.core.resources.IResource">
+               </objectClass>
+               <or>
+                  <objectClass
+                        name="org.eclipse.core.resources.IProject">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.core.resources.IFile">
+                  </objectClass>
+               </or>
+            </and>
+         </enablement>
+      </decorator>
+    </extension>
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->   
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!-- ~~~~~~ Context menu addition for model files ~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<extension point="org.eclipse.ui.menus">
+	   <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">       
+	      <command 
+			commandId="org.xtext.passi.DocGen.ui.GenerationCommand" 
+			style="push"
+			icon="Icons/generateDocumentation.png">
+			<!--  No more needed since a method in the DocGenGenerator class check the extension of the selected file  
+			  	<visibleWhen checkEnabled="false">  
+				    <iterate>      
+				      <adapt type="org.eclipse.core.resources.IResource">         
+							<test property="org.eclipse.core.resources.name" value="*.xml"/>
+				      </adapt>   
+				    </iterate>          
+			  	</visibleWhen> 
+			  	--> 
+	      </command>   
+	    </menuContribution>   
+	</extension>
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+
+
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!-- ~~~~~~ Toolbar button addition ~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<extension point="org.eclipse.ui.menus">
+	   <menuContribution
+	          allPopups="false"
+	          locationURI="toolbar:org.eclipse.ui.main.toolbar?before=additions">
+				  	<toolbar id="CodeGeneration_ToolBar">
+				        <command
+				                commandId="org.xtext.passi.DocGen.ui.GenerationCommand"
+				                label="Generate Documentation"
+				                icon="Icons/generateDocumentation.png"
+				                style="push">
+				      	</command>   
+				    </toolbar>
+	    </menuContribution> 
+	</extension>
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+	<!-- ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ -->
+
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Custom DocGen property page -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="org.xtext.passi.DocGen.compiler.propertyPage"
+            name="Compiler">
+            <keywordReference id="org.xtext.passi.ui.keyword_DocGen"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="org.xtext.passi.DocGen.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="org.xtext.passi.DocGen.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+    <!-- quickfix marker resolution generator for org.xtext.passi.DocGen -->
+    <extension
+            point="org.eclipse.ui.ide.markerResolution">
+        <markerResolutionGenerator
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.xtext.passi.ui.docgen.check.fast">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.xtext.passi.ui.docgen.check.normal">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.xtext.passi.ui.docgen.check.expensive">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+    </extension>
+    <extension
+          point="org.eclipse.core.runtime.preferences">
+       <initializer
+             class="org.xtext.passi.DocGen.ui.preferences.PreferenceInitializer">
+       </initializer>
+    </extension>
+    <!--
+    <extension
+          point="org.eclipse.core.runtime.preferences"
+          id="preferences"
+          name="preferences">
+       <scope
+             class="org.xtext.passi.DocGen.ui.prefs.ProjectPreferences"
+             name="org.xtext.passi.DocGen.preferenceScope">
+       </scope>
+    </extension>
+    -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Custom DocGen project wizard extension -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <category
+             id="org.xtext.passi.DocGen.ui.projectWizardCategory"
+             name="PASSI">
+       </category>
+       <category
+             id="org.xtext.passi.DocGen.ui.passiDiagramsWizardCategory"
+             name="PASSI Diagrams"
+             parentCategory="org.xtext.passi.DocGen.ui.projectWizardCategory">
+       </category>
+       <wizard
+             category="org.xtext.passi.DocGen.ui.projectWizardCategory"
+             class="org.xtext.passi.DocGen.wizard.projectWizard"
+             id="org.xtext.passi.DocGen.ui.passiProjectWizard"
+             name="New PASSI Project"
+             icon="Icons/PassiProjectIcon.png"
+             project="true">
+       </wizard>
+    </extension>
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!--  Agent Identification wizard extension -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <wizard
+             category="org.xtext.passi.DocGen.ui.projectWizardCategory/org.xtext.passi.DocGen.ui.passiDiagramsWizardCategory"
+             class="org.xtext.passi.DocGen.wizard.diagrams.AIdiagramWizard"
+             hasPages="true"
+             icon="Icons/diagramIcon.png"
+             id="org.xtext.passi.DocGen.ui.AIdiagramWizard"
+             name="Agent Identification"
+             project="false">
+       </wizard>
+    </extension>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!--  		DRD diagram wizard extension    -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <wizard
+             category="org.xtext.passi.DocGen.ui.projectWizardCategory/org.xtext.passi.DocGen.ui.passiDiagramsWizardCategory"
+             class="org.xtext.passi.DocGen.wizard.diagrams.DRDdiagramWizard"
+             hasPages="true"
+             icon="Icons/diagramIcon.png"
+             id="org.xtext.passi.DocGen.ui.DRDdiagramWizard"
+             name="Domain Requirement Description"
+             project="false">
+       </wizard>
+    </extension>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!--  	PASSISEQ diagram wizard extension   -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <wizard
+             category="org.xtext.passi.DocGen.ui.projectWizardCategory/org.xtext.passi.DocGen.ui.passiDiagramsWizardCategory"
+             class="org.xtext.passi.DocGen.wizard.diagrams.PassiSeqDiagramWizard"
+             hasPages="true"
+             icon="Icons/diagramIcon.png"
+             id="org.xtext.passi.DocGen.ui.PassiSeqDiagramWizard"
+             name="Sequence Diagram"
+             project="false">
+       </wizard>
+    </extension>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- 		Template wizard extension 		-->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+      		category="org.xtext.passi.DocGen.ui.projectWizardCategory"
+            name="Documentation template"
+            class="org.xtext.passi.DocGen.wizard.templateWizard"
+            id="org.xtext.passi.DocGen.ui.passiTemplateWizard"
+            icon="Icons/template.png"
+            project="false">
+      </wizard>
+    </extension>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    
+    <extension
+          point="org.eclipse.ui.views">
+       <view
+             class="org.eclipse.ui.navigator.CommonNavigator"
+             id="docGenPlugin.navigator"
+             name="Custom Plug-in Navigator">
+       </view>
+    </extension>
+    <extension
+          point="org.eclipse.ui.navigator.viewer">
+       <viewerActionBinding
+             viewerId="docGenPlugin.navigator">
+          <includes>
+             <actionExtension
+                   pattern="org.eclipse.ui.navigator.resources.*">
+             </actionExtension>
+          </includes>
+       </viewerActionBinding>
+       <viewerContentBinding
+             viewerId="docGenPlugin.navigator">
+          <includes>
+             <contentExtension
+                   pattern="org.eclipse.ui.navigator.resourceContent">
+             </contentExtension>
+             <contentExtension
+                   pattern="org.eclipse.ui.navigator.resources.filters.*">
+             </contentExtension>
+             <contentExtension
+                   pattern="org.eclipse.ui.navigator.resources.linkHelper">
+             </contentExtension>
+             <contentExtension
+                   pattern="org.eclipse.ui.navigator.resources.workingSets">
+             </contentExtension>
+          </includes>
+       </viewerContentBinding>
+    </extension>
+    <extension
+          point="org.eclipse.ui.perspectiveExtensions">
+       <perspectiveExtension
+             targetID="org.eclipse.ui.resourcePerspective">
+          <view
+                id="docGenPlugin.navigator"
+                ratio="0.5"
+                relationship="stack"
+                relative="org.eclipse.ui.navigator.ProjectExplorer">
+          </view>
+       </perspectiveExtension>
+    </extension>
+    
+    <extension point="org.eclipse.compare.contentViewers">
+    <viewer id="org.xtext.passi.DocGen.compare.contentViewers"
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="drd,ai,rid">
+    </viewer>
+  </extension>
+  <extension point="org.eclipse.compare.contentMergeViewers">
+    <viewer id="org.xtext.passi.DocGen.compare.contentMergeViewers"
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="drd,ai,rid" label="DocGen Compare">
+     </viewer>
+  </extension>
+  <extension point="org.eclipse.ui.editors.documentProviders">
+    <provider id="org.xtext.passi.DocGen.editors.documentProviders"
+            class="org.xtext.passi.ui.DocGenExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+            extensions="drd,ai,rid">
+    </provider>
+  </extension>
+
+</plugin>
