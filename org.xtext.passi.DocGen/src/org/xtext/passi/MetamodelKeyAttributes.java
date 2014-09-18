@@ -22,13 +22,14 @@ public class MetamodelKeyAttributes
 	private static final String ACTORNAME 				= "ActorName";
 	private static final String USECASENAME 			= "UseCaseName";
 	private static final String COMMUNICATIONFUNCTREQ 	= "CommunicationFunctReq";
-	
+	private static final String AGENTNAME 				= "AgentName";
 	
 	public static boolean isKeyAttribute(String kw)
 	{		
 		return kw.equals(NAME) 						|| 
 			   kw.equals(ACTORNAME) 				||
 			   kw.equals(USECASENAME) 				||
-			   kw.equals(COMMUNICATIONFUNCTREQ);
+			   kw.equals(COMMUNICATIONFUNCTREQ)		||
+			   kw.equals(AGENTNAME);
 	}
 }

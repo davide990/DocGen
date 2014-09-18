@@ -40,6 +40,7 @@ import org.xtext.passi.docGen.emptyElement
 import org.xtext.passi.metamodels.MetamodelsLoader
 import org.xtext.passi.PassiPersistentModelExtensions
 import org.xtext.passi.MetamodelKeyAttributes
+import javax.sound.sampled.BooleanControl.Type
 
 /**
  * Main class for documentation generation. It includes the entry point
@@ -253,12 +254,15 @@ class DocGenGenerator implements IGenerator
 	 */
 	def Document loadMetamodelFileFromPersistenceModelXMLnameSpaceAttribute(element e)
 	{
+		if(e.start == null)
+			throw new Exception("metamodel namespace information not found. May your diagram has only one element?");
+			
 		if(!e.start.attributes.empty)
 		{
 			for(att : e.start.attributes)
 			{
-				//Search for the metamodel where to take the informations about the
-				//elements of the model to compile
+				//Search for the metamodel from which to take the informations about the
+				//elements of the persistence model to compile
 				if(att.name.equals("xmlns") && !att.rightName.equals("xmi"))
 				{
 					//set the metamodel document to look at when generating 
@@ -303,9 +307,25 @@ class DocGenGenerator implements IGenerator
 		
 		//get the number of elements in the model
 		var numElements = modelElements.length
-				
-		for (i : 0 ..< numElements) 
-			insertPersistentModelElementInHashTable(modelElements.get(i), i)		
+			/*	
+		var xmiTagFound = false;  
+		
+		for (i : 0 ..< numElements)
+		{ 
+			if(modelElements.get(i).start.tagName.name.equals("xmi"))
+				xmiTagFound = true;
+		}	
+		
+		if(!xmiTagFound)
+		{
+			throw new Exception("xmi tag not found. May your diagram has only one element?");
+		}*/
+		
+		for (i : 0 ..< numElements)
+		{
+			insertPersistentModelElementInHashTable(modelElements.get(i), i)
+			
+		}		
 	}
 	
 	/**
@@ -371,16 +391,26 @@ class DocGenGenerator implements IGenerator
 			 			if(type.equals("EReference"))
 			 			{
 			 				var str = new StringConcatenation
-			 				val attributeValues = processEReferencePointerAttribute(attr.^val);
 			 				
-			 				for(t : 0 ..< attributeValues.size-1)
+			 				
+			 				if(EClassName.equals("Agent"))
 			 				{
-			 					str.append(attributeValues.get(t))
-			 					str.append(", ")
+			 					var a = 1;
+			 					a=2;
 			 				}
-			 				
-			 				str.append(attributeValues.get(attributeValues.size-1))
-			 				attributeValue = str.toString
+			 				print("attr.^val: ");println(attr.^val);
+			 				val attributeValues = processEReferencePointerAttribute(attr.^val);
+			 				if(attributeValues.size > 0)
+			 				{
+				 				for(t : 0 ..< attributeValues.size-1)
+				 				{
+				 					str.append(attributeValues.get(t))
+				 					str.append(", ")
+				 				}
+				 				
+				 				str.append(attributeValues.get(attributeValues.size-1))
+				 				attributeValue = str.toString
+			 				}
 			 			}
 			 			//Insert a new entry in the hash table
 			 			persistenceModelHashTable.put(new String(EClassName + ":" + 
@@ -499,9 +529,12 @@ class DocGenGenerator implements IGenerator
 				//if attr is a key attribute, append it's value to the string 
 				if(MetamodelKeyAttributes.isKeyAttribute(attr.name))
 				{
+					print("Eclass: ");println(EClassName);
+						print("Attribute: ");println(attr.name);
 					//if attr is an EReference attribute, then parse it's content.
 					if(isEReferenceAttribute(EClassName, attr.name))
 					{
+						println("EReference attribute!");
 						listString.addAll(processEReferencePointerAttribute(attr.^val));
 					}
 					else

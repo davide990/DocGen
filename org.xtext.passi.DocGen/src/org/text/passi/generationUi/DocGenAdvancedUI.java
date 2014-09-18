@@ -18,7 +18,6 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -32,11 +31,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.IntegerExtensions;
 import org.eclipse.xtext.xbase.lib.StringExtensions;
@@ -71,7 +68,6 @@ public class DocGenAdvancedUI
 	 * output documentation.
 	 * 
 	 * @author davide
-	 *
 	 */
 	public static enum DOCUMENTATION_STYLE
 	{
@@ -192,12 +188,6 @@ public class DocGenAdvancedUI
 	private String pathToDiagramImageFile;
 
 	/**
-	 * The text control for the path to the
-	 * diagram image file. 
-	 */
-	private Text TextPathToDiagramImage;
-
-	/**
 	 * The combo box control used to choose the key EClass for
 	 * by eclass documentation style.
 	 */
@@ -239,9 +229,7 @@ public class DocGenAdvancedUI
 		//Initialize this window's UI controls.
 		initializeUI();
 		
-		//TODO .......
 		setEClassesInUIControls();
-		//prepareExpandBar(DOCUMENTATION_STYLE.STYLE_BY_ECLASS);
 	}
 	
 	/**
@@ -1175,17 +1163,6 @@ public class DocGenAdvancedUI
 		excluded.add(featureName);
 		excludedFeatures.put(EClassName, excluded);
 		
-		//TODO rimuovere dalla lista featureOrder
-		/*for(int k=0; k < featurePresentationOrderList.getItemCount(); k++)
-		{
-			if(featurePresentationOrderList.getItem(k).equals(featureName))
-			{
-				featurePresentationOrderList.remove(k);
-				break;
-			}
-		}
-		
-		*/
 		removeFeatureFromOrderList(EClassName, featureName);
 		setFeaturesOrderInListControl(EClassName);
 	}
@@ -1300,12 +1277,8 @@ public class DocGenAdvancedUI
 		//when templatePath is null, user probably cleared the template combo box
 		//in the launcher window, or a wrong template title has been written.
 		//If is not null but the file doesn't exist, show an error.
-		//TODO no, va DOPO il parsing del template
 		if(StringExtensions.isNullOrEmpty(templatePath))
-		{
-			//prepareExpandBar(DOCUMENTATION_STYLE.STYLE_FULL);
 			return;
-		}
 		else if(!new File(templatePath).exists())
 		{
 			MessageDialog.openError(new Shell(), "Error", "Error loading template file '" + templatePath + "'.");

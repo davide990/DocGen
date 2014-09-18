@@ -265,30 +265,35 @@ public class DocGenGenerator implements IGenerator {
   public Document loadMetamodelFileFromPersistenceModelXMLnameSpaceAttribute(final element e) {
     try {
       startTag _start = e.getStart();
-      EList<Attribute> _attributes = _start.getAttributes();
+      boolean _equals = Objects.equal(_start, null);
+      if (_equals) {
+        throw new Exception("metamodel namespace information not found. May your diagram has only one element?");
+      }
+      startTag _start_1 = e.getStart();
+      EList<Attribute> _attributes = _start_1.getAttributes();
       boolean _isEmpty = _attributes.isEmpty();
       boolean _not = (!_isEmpty);
       if (_not) {
-        startTag _start_1 = e.getStart();
-        EList<Attribute> _attributes_1 = _start_1.getAttributes();
+        startTag _start_2 = e.getStart();
+        EList<Attribute> _attributes_1 = _start_2.getAttributes();
         for (final Attribute att : _attributes_1) {
           boolean _and = false;
           String _name = att.getName();
-          boolean _equals = _name.equals("xmlns");
-          if (!_equals) {
+          boolean _equals_1 = _name.equals("xmlns");
+          if (!_equals_1) {
             _and = false;
           } else {
             String _rightName = att.getRightName();
-            boolean _equals_1 = _rightName.equals("xmi");
-            boolean _not_1 = (!_equals_1);
+            boolean _equals_2 = _rightName.equals("xmi");
+            boolean _not_1 = (!_equals_2);
             _and = _not_1;
           }
           if (_and) {
             String _val = att.getVal();
             String _metamodelAbsolutePath = this.getMetamodelAbsolutePath(_val);
             this.metamodelFileName = _metamodelAbsolutePath;
-            boolean _equals_2 = Objects.equal(this.metamodelFileName, null);
-            if (_equals_2) {
+            boolean _equals_3 = Objects.equal(this.metamodelFileName, null);
+            if (_equals_3) {
               Shell _shell = new Shell();
               MessageDialog.openError(_shell, "DocGen Error", "No metamodel loaded for the selected persistence model.");
               throw new Exception("[DOCGEN ERROR] No metamodel loaded for the selected persistence model.");
@@ -377,24 +382,36 @@ public class DocGenGenerator implements IGenerator {
               boolean _equals_1 = type.equals("EReference");
               if (_equals_1) {
                 StringConcatenation str = new StringConcatenation();
-                String _val = attr.getVal();
-                final List<String> attributeValues = this.processEReferencePointerAttribute(_val);
-                int _size_1 = attributeValues.size();
-                int _minus = (_size_1 - 1);
-                ExclusiveRange _doubleDotLessThan_2 = new ExclusiveRange(0, _minus, true);
-                for (final Integer t : _doubleDotLessThan_2) {
-                  {
-                    String _get_1 = attributeValues.get((t).intValue());
-                    str.append(_get_1);
-                    str.append(", ");
-                  }
+                boolean _equals_2 = EClassName.equals("Agent");
+                if (_equals_2) {
+                  int a = 1;
+                  a = 2;
                 }
-                int _size_2 = attributeValues.size();
-                int _minus_1 = (_size_2 - 1);
-                String _get_1 = attributeValues.get(_minus_1);
-                str.append(_get_1);
-                String _string = str.toString();
-                attributeValue = _string;
+                InputOutput.<String>print("attr.^val: ");
+                String _val = attr.getVal();
+                InputOutput.<String>println(_val);
+                String _val_1 = attr.getVal();
+                final List<String> attributeValues = this.processEReferencePointerAttribute(_val_1);
+                int _size_1 = attributeValues.size();
+                boolean _greaterThan = (_size_1 > 0);
+                if (_greaterThan) {
+                  int _size_2 = attributeValues.size();
+                  int _minus = (_size_2 - 1);
+                  ExclusiveRange _doubleDotLessThan_2 = new ExclusiveRange(0, _minus, true);
+                  for (final Integer t : _doubleDotLessThan_2) {
+                    {
+                      String _get_1 = attributeValues.get((t).intValue());
+                      str.append(_get_1);
+                      str.append(", ");
+                    }
+                  }
+                  int _size_3 = attributeValues.size();
+                  int _minus_1 = (_size_3 - 1);
+                  String _get_1 = attributeValues.get(_minus_1);
+                  str.append(_get_1);
+                  String _string = str.toString();
+                  attributeValue = _string;
+                }
               }
               String _name_1 = attr.getName();
               String _plus = ((EClassName + ":") + _name_1);
@@ -500,9 +517,15 @@ public class DocGenGenerator implements IGenerator {
           String _name = attr.getName();
           boolean _isKeyAttribute = MetamodelKeyAttributes.isKeyAttribute(_name);
           if (_isKeyAttribute) {
+            InputOutput.<String>print("Eclass: ");
+            InputOutput.<String>println(EClassName);
+            InputOutput.<String>print("Attribute: ");
             String _name_1 = attr.getName();
-            boolean _isEReferenceAttribute = this.isEReferenceAttribute(EClassName, _name_1);
+            InputOutput.<String>println(_name_1);
+            String _name_2 = attr.getName();
+            boolean _isEReferenceAttribute = this.isEReferenceAttribute(EClassName, _name_2);
             if (_isEReferenceAttribute) {
+              InputOutput.<String>println("EReference attribute!");
               String _val = attr.getVal();
               List<String> _processEReferencePointerAttribute = this.processEReferencePointerAttribute(_val);
               listString.addAll(_processEReferencePointerAttribute);
