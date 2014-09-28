@@ -55,10 +55,7 @@ public class PassiPropertyPage extends PropertyPage
 		//Get the metamodels path property
 		String s = getMetamodelsPathProperty();
 		if(!StringExtensions.isNullOrEmpty(s))
-		{
-			System.out.println(s);	//TODO da rimuovere...
 			metamodelsPathTextBox.setText(s);
-		}
 		
 		//Separator
 		Label label = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -91,10 +88,7 @@ public class PassiPropertyPage extends PropertyPage
 		//Get the template path property
 		s = getTemplatePathProperty();
 		if(!StringExtensions.isNullOrEmpty(s))
-		{
-			System.out.println(s);	//TODO da rimuovere...
 			templatePathTextBox.setText(s);
-		}
 		
 		Button loadTemplateButton = new Button(composite, SWT.NONE);
 		loadTemplateButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -250,29 +244,15 @@ public class PassiPropertyPage extends PropertyPage
 			
 			if(((IResource) getElement()).exists())
 			{
-				//Save the metamodel path property
-				String s = metamodelsPathTextBox.getText();
-
-				//Do nothing is the path is invalid
-				//if(!s.isEmpty() && s != null)
-			//	{
-					//Finally, set the metamodels path as a project property
-					((IResource) getElement()).setPersistentProperty(
-						new QualifiedName(projectName, METAMODELS_PATH_PROPERTY),metamodelsPathTextBox.getText());
-					//	}
-				
+				//Finally, set the metamodels path as a project property
+				((IResource) getElement()).setPersistentProperty(
+					new QualifiedName(projectName, METAMODELS_PATH_PROPERTY),metamodelsPathTextBox.getText());
 				//---------------------------------
-				
-				//Save the template path property
-				s = templatePathTextBox.getText();
 
 				//Do nothing is the path is invalid
-				//	if(!s.isEmpty() && s != null)
-					//	{
-					//Finally, set the metamodels path as a project property
-					((IResource) getElement()).setPersistentProperty(
-						new QualifiedName(projectName, TEMPLATE_PATH_PROPERTY),templatePathTextBox.getText());
-					//	}
+				//Finally, set the metamodels path as a project property
+				((IResource) getElement()).setPersistentProperty(
+					new QualifiedName(projectName, TEMPLATE_PATH_PROPERTY),templatePathTextBox.getText());
 			}
 		} 
 		catch (CoreException e) 

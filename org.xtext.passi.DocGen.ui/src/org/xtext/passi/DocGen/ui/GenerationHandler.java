@@ -20,8 +20,6 @@ import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-
-//TODO accertarsi del fatto che con EclipseResourceFileSystemAccess2 funzioni
 /**
  * The class responsible for handling the context menu/toolbar entry "Generate Documentation". 
  * 
@@ -58,25 +56,8 @@ public class GenerationHandler extends AbstractHandler implements IHandler
 			{
 				IFile file = (IFile) firstElement; 
 				IProject project = file.getProject();
-				/*
-				IFolder srcGenFolder = project.getFolder("src­gen"); 
-				if (!srcGenFolder.exists())
-				{
-					try
-					{
-						srcGenFolder.create(true, true,new NullProgressMonitor());
-					}
-					catch (CoreException e)
-					{
-						return null;
-					}
 				
-				}
-	*/
-				//final EclipseResourceFileSystemAccess fsa = fileAccessProvider.get();
 				final EclipseResourceFileSystemAccess2 fsa = fileAccessProvider.get();
-				//fsa.setOutputPath(srcGenFolder.getFullPath().toString());
-				
 				
 				URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
 				ResourceSet rs = resourceSetProvider.get(project); 
