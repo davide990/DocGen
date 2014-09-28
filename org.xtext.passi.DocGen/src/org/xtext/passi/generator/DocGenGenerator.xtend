@@ -123,6 +123,13 @@ class DocGenGenerator implements IGenerator
 	private NodeList EClassList;
 	
 	/**
+	 * This list contains the name of the EClasses which must be ignored during the 
+	 * documentation generation process.
+	 */
+	private List<String> ignoredEclasses;
+	
+	
+	/**
 	 * Entry point. This function is called when user select "Generate Documentation" from the
 	 * contextual menu or the tool bar. It reads the metamodel informations, builds the 
 	 * necessary data structure and opens the launcher window.
@@ -132,7 +139,11 @@ class DocGenGenerator implements IGenerator
 		persistenceModelHashTable 			= new Hashtable
 		excludedFeatures 					= new ArrayList
 		excludedEClasses 					= new ArrayList
+		ignoredEclasses 					= new ArrayList
 		outputDocumentationType 			= ""
+		
+		
+		setIgnoredEClasses
 		
 		//Before reading the persistence models, (re)load the metamodels.
 		//If no metamodel path is set, ReloadMetamodels method returns false,
@@ -197,6 +208,15 @@ class DocGenGenerator implements IGenerator
 		launcherUI.setMetamodelDoc(metamodelDoc)
 		launcherUI.setModelElements(modelElements);
 		launcherUI.open
+	}
+	
+	/**
+	 * Ignore an EClass during the documentation generation process.
+	 */
+	private def setIgnoredEClasses()
+	{
+		ignoredEclasses.add("ResponsibleFor");
+		//ignoredEclasses.add(EClassName);
 	}
 	
 	/**
@@ -353,7 +373,10 @@ class DocGenGenerator implements IGenerator
 			//EClass name.
 			val EClassName = persistenceModelElement.tagName.rightName
 			
-			persistenceModelElement.attributes
+			if(ignoredEclasses.contains(EClassName))
+				return;
+			
+			//persistenceModelElement.attributes
 			
 			//Get the corresponding EClass object in the metamodel
 			val eClassifier = getEClassByName(EClassName);
@@ -391,7 +414,6 @@ class DocGenGenerator implements IGenerator
 			 			if(type.equals("EReference"))
 			 			{
 			 				var str = new StringConcatenation
-			 				
 			 				
 			 				if(EClassName.equals("Agent"))
 			 				{
